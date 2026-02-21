@@ -19,7 +19,7 @@ const getOpenAIAPIResponse = async(message) => {
     try{
         const response = await fetch("https://integrate.api.nvidia.com/v1/chat/completions", options);
         const data = await response.json();
-        return res.send(data.choices[0].message.content); //reply
+        return data.choices[0].message.content; //reply
     } catch(err){
         console.log(err);
     }

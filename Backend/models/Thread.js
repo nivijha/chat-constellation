@@ -1,11 +1,6 @@
 import mongoose from "mongoose";
 
 const MessageSchema = new  mongoose.Schema({
-    msgID: {
-        type: String,
-        required: true,
-        unique: true
-    },
     role: {
         type: String,
         enum: ["user", "assisstant"],
