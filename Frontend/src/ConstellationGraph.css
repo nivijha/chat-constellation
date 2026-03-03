@@ -1,0 +1,231 @@
+.constellation-wrapper {
+  width: 100%;
+  height: 100%;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: radial-gradient(ellipse at bottom, #0a0a0c 0%, #000000 100%); /* Pitch black sky */
+  position: relative;
+  border-top: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.dark-flow {
+  background: transparent;
+}
+
+/* Override React Flow defaults for Dark Mode */
+.react-flow__controls {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.react-flow__controls-button {
+  background: var(--surface) !important;
+  fill: var(--text) !important;
+  border-bottom: 1px solid var(--border) !important;
+}
+.react-flow__controls-button:hover {
+  background: var(--surface-2) !important;
+}
+
+.dark-minimap {
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 8px !important;
+}
+
+/* Custom Node Styles */
+.constellation-node {
+  border-radius: 12px !important;
+  border: 1px solid var(--border) !important;
+  padding: 10px 14px !important;
+  width: 280px;
+  color: var(--text) !important;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4) !important;
+  cursor: pointer !important;
+  transition: transform 0.15s, border-color 0.15s;
+}
+
+.constellation-node:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent) !important;
+}
+
+.bg-user {
+  background: var(--surface-2) !important;
+}
+
+.bg-ai {
+  background: rgba(124, 111, 255, 0.1) !important;
+  border-color: rgba(124, 111, 255, 0.3) !important;
+}
+
+/* Galaxy Macro Nodes */
+/* Galaxy Macro Nodes (The Stars 2D version) */
+.global-star-2d {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: transform 0.2s ease;
+}
+
+.galaxy-star-core-2d {
+  width: 6px;
+  height: 6px;
+  background: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 0 8px 2px rgba(255, 255, 255, 0.8);
+  transition: all 0.2s ease;
+  z-index: 2;
+}
+
+.galaxy-star-glow-2d {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 70%);
+  border-radius: 50%;
+  z-index: 1;
+  pointer-events: none;
+  transition: all 0.2s ease;
+}
+
+.global-star-2d:hover {
+  transform: translate(-50%, -50%) scale(1.5) !important;
+  z-index: 1000;
+}
+
+.global-star-2d:hover .galaxy-star-core-2d {
+  box-shadow: 0 0 12px 4px rgba(255, 255, 255, 1);
+}
+
+.global-star-2d:hover .galaxy-star-glow-2d {
+  width: 40px;
+  height: 40px;
+  background: radial-gradient(circle, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 70%);
+}
+
+.galaxy-star-text-2d {
+  position: absolute;
+  top: -46px;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  background: rgba(20, 20, 25, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 8px 14px;
+  border-radius: 12px;
+  font-size: 13px;
+  letter-spacing: 0.3px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.9);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  z-index: 1001;
+}
+
+/* Minimal Tooltip caret */
+.galaxy-star-text-2d::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 10px;
+  height: 10px;
+  background: rgba(20, 20, 25, 0.85);
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.global-star-2d:hover .galaxy-star-text-2d {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+.constellation-node-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.node-icon {
+  font-size: 16px;
+  line-height: 1.2;
+}
+
+.node-user .node-icon {
+  color: var(--text-muted);
+}
+.node-ai .node-icon {
+  color: var(--accent);
+}
+
+.node-text {
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--text);
+  word-break: break-word;
+}
+
+/* ── Clean Zoom Controls for 2D View ── */
+.zoom-controls {
+  position: absolute;
+  bottom: 32px;
+  right: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 100;
+}
+
+.zoom-controls button {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(30, 30, 35, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  transition: all 0.2s ease;
+}
+
+.zoom-controls button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* ── Panning Drag Cursors ── */
+.react-transform-component {
+  width: 100% !important;
+  height: 100% !important;
+  cursor: grab !important;
+}
+
+.react-transform-component:active {
+  cursor: grabbing !important;
+}
