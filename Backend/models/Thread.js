@@ -1,6 +1,15 @@
 import mongoose from "mongoose";
+import crypto from "crypto";
 
 const MessageSchema = new  mongoose.Schema({
+    messageId: {
+        type: String,
+        default: () => crypto.randomUUID()
+    },
+    parentId: {
+        type: String,
+        default: null
+    },
     role: {
         type: String,
         enum: ["user", "assisstant"],

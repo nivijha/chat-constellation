@@ -1,6 +1,7 @@
 import express from "express";
 import Thread from "../models/Thread.js";
-import getOpenAIAPIResponse from "../utils/openai.js"
+import getOpenAIAPIResponse from "../utils/openai.js";
+import crypto from "crypto";
 
 const router = express.Router();
 
@@ -22,7 +23,7 @@ router.post("/test", async(req, res)=>{
 //Get all threads /thread
 router.get("/thread", async(req, res)=>{
     try{
-        const threads = await Thread.find({}).sort({updatedAt:-1});
+        const threads = await Thread.find({}, { messages: 0 }).sort({updatedAt:-1});
         // desc order of UpdatedAt 
         res.json(threads);
     } catch(err) {
@@ -65,7 +66,7 @@ router.delete("/thread/:threadID", async(req, res)=>{
 
 //POST /chat — new chat in thread
 router.post("/chat", async(req, res)=>{
-    const {threadID, message} = req.body;
+    const {threadID, message, parentId, messageId: providedMessageId} = req.body;
 
     if(!threadID || !message){
         res.status(400).json({error: "missing required fields"});
@@ -73,26 +74,48 @@ router.post("/chat", async(req, res)=>{
 
     try{
         let thread = await Thread.findOne({threadID});
+        let actualParentId = parentId || null;
 
         if(!thread){
             //create new thread
             thread = new Thread({
                 threadID: threadID,
                 title: message,
-                messages: [{role: "user", content: message}]
+                messages: []
             });
         }
-        else {
-            thread.messages.push({role: "user", content: message});
+        else if (!actualParentId && thread.messages.length > 0) {
+            actualParentId = thread.messages[thread.messages.length - 1].messageId;
         }
 
-        const assisstantReply = await getOpenAIAPIResponse(message);
+        const userMsgId = providedMessageId || crypto.randomUUID();
 
-        thread.messages.push({role: "assisstant", content: assisstantReply});
+        thread.messages.push({
+            messageId: userMsgId,
+            parentId: actualParentId,
+            role: "user", 
+            content: message
+        });
+
+        const assisstantReply = await getOpenAIAPIResponse(message);
+        
+        const assistantMsgId = crypto.randomUUID();
+
+        thread.messages.push({
+            messageId: assistantMsgId,
+            parentId: userMsgId,
+            role: "assisstant", 
+            content: assisstantReply
+        });
+        
         thread.updatedAt = new Date();
 
         await thread.save();
-        res.json({reply: assisstantReply});
+        res.json({
+            reply: assisstantReply, 
+            userMessageId: userMsgId, 
+            assistantMessageId: assistantMsgId
+        });
     } catch(err) {
         console.log(err);
         res.status(500).json({error: "something went wrong"});
