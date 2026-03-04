@@ -57,6 +57,16 @@ app.get("/", (req, res) => res.json({ status: "API is running" })); // Health ch
 app.use("/api/auth", authRoutes); // Auth first
 app.use("/api", chatRoutes); // Then generic api/chat
 
+// 5. Global Error Handler
+app.use((err, req, res, next) => {
+    console.error("Global Error Handler:", err);
+    res.status(err.status || 500).json({
+        error: "Internal Server Error",
+        message: err.message,
+        details: process.env.NODE_ENV === 'development' ? err.stack : undefined
+    });
+});
+
 app.listen(PORT, ()=>{
     console.log(`server running on ${PORT}`);
     connectionDB();

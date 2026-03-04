@@ -83,13 +83,16 @@ router.post("/google", async (req, res) => {
     console.log("Backend: Received Google login request. Client ID exists:", !!process.env.GOOGLE_CLIENT_ID);
 
     try {
+        console.log("Backend: Verifying Google ID token...");
         const oauthClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
         const ticket = await oauthClient.verifyIdToken({
             idToken: tokenId,
             audience: process.env.GOOGLE_CLIENT_ID,
         });
 
-        const { sub: googleId, email, name, picture } = ticket.getPayload();
+        const gPayload = ticket.getPayload();
+        console.log("Backend: Google token verified for:", gPayload.email);
+        const { sub: googleId, email, name, picture } = gPayload;
 
         let user = await User.findOne({ 
             $or: [
@@ -113,6 +116,10 @@ router.post("/google", async (req, res) => {
             await user.save();
         }
 
+        if (!process.env.JWT_SECRET) {
+            console.error("Backend Error: JWT_SECRET is missing in environment variables!");
+            return res.status(500).json({ error: "Server configuration error: JWT_SECRET is missing" });
+        }
         const payload = { userId: user._id };
         const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "7d" });
 
