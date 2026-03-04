@@ -234,7 +234,7 @@ function App() {
     } finally {
       setLoading(false);
     }
-  }, [token, currThreadId, loading, fetchThreads]);
+  }, [token, currThreadId, loading, fetchThreads, language]);
 
   const providerValues = {
     allThreads, setAllThreads,
