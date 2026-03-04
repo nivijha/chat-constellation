@@ -18,7 +18,7 @@ router.post("/register", async (req, res) => {
     try {
         let user = await User.findOne({ email });
         if (user) {
-            return res.status(400).json({ error: "User already exists" });
+            return res.status(400).json({ error: "An account with this email already exists. Try logging in instead." });
         }
 
         user = new User({ email, password, displayName });
@@ -52,12 +52,12 @@ router.post("/login", async (req, res) => {
     try {
         const user = await User.findOne({ email });
         if (!user) {
-            return res.status(400).json({ error: "Invalid credentials" });
+            return res.status(400).json({ error: "No account found with this email. Please sign up first." });
         }
 
         const isMatch = await user.comparePassword(password);
         if (!isMatch) {
-            return res.status(400).json({ error: "Invalid credentials" });
+            return res.status(400).json({ error: "Incorrect password. Please try again." });
         }
 
         const payload = { userId: user._id };
