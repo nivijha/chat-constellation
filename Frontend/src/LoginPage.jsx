@@ -90,7 +90,6 @@ const LoginPage = ({ onLogin, onRegister, onGoogleLogin }) => {
                         ) : (
                             <GoogleLogin
                                 onSuccess={async credentialResponse => {
-                                    console.log("LoginPage Google onSuccess triggered");
                                     setError("");
                                     setGoogleLoading(true);
                                     try {

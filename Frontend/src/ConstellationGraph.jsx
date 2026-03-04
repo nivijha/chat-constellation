@@ -90,7 +90,6 @@ export default function ConstellationGraph() {
 
   // Safely sync ReactFlow state when new derived layout happens (like new messages)
   useEffect(() => {
-    console.log("ConstellationGraph syncing with nodes:", initialNodes);
     setNodes(initialNodes);
     setEdges(initialEdges);
   }, [initialNodes, initialEdges, setNodes, setEdges]);

@@ -37,7 +37,6 @@ function App() {
 
   // Sync auth and thread to local storage
   useEffect(() => {
-    console.log("App.jsx Sync: token:", token, "user:", user);
     if (token) localStorage.setItem("chatConstellationToken", token);
     else localStorage.removeItem("chatConstellationToken");
 
@@ -80,7 +79,6 @@ function App() {
   }, []);
 
   const onGoogleLogin = useCallback(async (tokenId) => {
-    console.log("App.jsx: Initiating Google Login with server...");
     try {
       const res = await fetch(`${API}/auth/google`, {
         method: "POST",
@@ -88,7 +86,6 @@ function App() {
         body: JSON.stringify({ tokenId }),
       });
       const data = await res.json();
-      console.log("App.jsx onGoogleLogin: API Response:", data);
       
       if (!res.ok) {
         const errorMsg = data.error || data.details || "Google Auth failed on server";
@@ -98,7 +95,6 @@ function App() {
 
       setToken(data.token);
       setUser(data.user);
-      console.log("App.jsx onGoogleLogin: Auth states successfully updated.");
     } catch (err) {
       console.error("App.jsx onGoogleLogin: Catch block reached:", err);
       throw err; // Re-throw to be caught by LoginPage

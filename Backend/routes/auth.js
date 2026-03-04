@@ -80,10 +80,8 @@ router.post("/login", async (req, res) => {
 // Google Login
 router.post("/google", async (req, res) => {
     const { tokenId } = req.body;
-    console.log("Backend: Received Google login request. Client ID exists:", !!process.env.GOOGLE_CLIENT_ID);
 
     try {
-        console.log("Backend: Verifying Google ID token...");
         const oauthClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
         const ticket = await oauthClient.verifyIdToken({
             idToken: tokenId,
@@ -91,7 +89,6 @@ router.post("/google", async (req, res) => {
         });
 
         const gPayload = ticket.getPayload();
-        console.log("Backend: Google token verified for:", gPayload.email);
         const { sub: googleId, email, name, picture } = gPayload;
 
         if (!email) {
