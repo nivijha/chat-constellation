@@ -39,8 +39,8 @@ app.use(cors({
     optionsSuccessStatus: 200
 }));
 
-// Pre-flight for all routes
-app.options('*', cors());
+// CORS is already handled globally by app.use(cors(...)) above.
+// No need for app.options('*') which can cause PathErrors in newer Express versions.
 
 // 3. Security Headers
 app.use(helmet({
