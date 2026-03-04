@@ -2,6 +2,7 @@ import express from "express";
 import Thread from "../models/Thread.js";
 import getOpenAIAPIResponse from "../utils/openai.js";
 import crypto from "crypto";
+import auth from "../middleware/auth.js";
 
 const router = express.Router();
 
@@ -21,9 +22,9 @@ router.post("/test", async(req, res)=>{
 })
 
 //Get all threads /thread
-router.get("/thread", async(req, res)=>{
+router.get("/thread", auth, async(req, res)=>{
     try{
-        const threads = await Thread.find({}, { messages: 0 }).sort({updatedAt:-1});
+        const threads = await Thread.find({ userID: req.user.userId }, { messages: 0 }).sort({updatedAt:-1});
         // desc order of UpdatedAt 
         res.json(threads);
     } catch(err) {
@@ -33,28 +34,28 @@ router.get("/thread", async(req, res)=>{
 })
 
 //Get a particular thread /thread/:threadID
-router.get("/thread/:threadID", async(req, res)=>{
+router.get("/thread/:threadID", auth, async(req, res)=>{
     const {threadID} = req.params;
     try{
-        const thread = await Thread.findOne({threadID});
+        const thread = await Thread.findOne({ threadID, userID: req.user.userId });
         if(!thread) {
-            res.status(404).json({error: "Thread not found"});
+            return res.status(404).json({error: "Thread not found"});
         }
 
         res.json(thread.messages);
     } catch(err) {
         console.log(err); 
-        res.status(500).json({error: "Failed to fetch threads"});
+        res.status(500).json({error: "Failed to fetch thread"}); // Fixed spelling: "threads" to "thread"
     }
 })
 
 //Delete /thread/:threadID
-router.delete("/thread/:threadID", async(req, res)=>{
+router.delete("/thread/:threadID", auth, async(req, res)=>{
     const {threadID} = req.params;
     try{
-        const deleteThread = await Thread.findOneAndDelete({threadID});
+        const deleteThread = await Thread.findOneAndDelete({ threadID, userID: req.user.userId });
         if(!deleteThread) {
-            res.status(404).json({error: "Thread could not be deleted"});
+            return res.status(404).json({error: "Thread could not be deleted"});
         }
 
         res.status(200).json({success : "Thread deleted successfully"});
@@ -65,21 +66,22 @@ router.delete("/thread/:threadID", async(req, res)=>{
 })
 
 //POST /chat — new chat in thread
-router.post("/chat", async(req, res)=>{
-    const {threadID, message, parentId, messageId: providedMessageId} = req.body;
+router.post("/chat", auth, async(req, res)=>{
+    const {threadID, message, language, parentId, messageId: providedMessageId} = req.body;
 
     if(!threadID || !message){
-        res.status(400).json({error: "missing required fields"});
+        return res.status(400).json({error: "missing required fields"});
     }
 
     try{
-        let thread = await Thread.findOne({threadID});
+        let thread = await Thread.findOne({ threadID, userID: req.user.userId });
         let actualParentId = parentId || null;
 
         if(!thread){
             //create new thread
             thread = new Thread({
                 threadID: threadID,
+                userID: req.user.userId,
                 title: message,
                 messages: []
             });
@@ -97,14 +99,20 @@ router.post("/chat", async(req, res)=>{
             content: message
         });
 
-        const assisstantReply = await getOpenAIAPIResponse(message);
+        // Determine if we need a language system prompt
+        let systemPrompt = "";
+        if (language === "hi") {
+            systemPrompt = "CRITICAL: You MUST respond purely in Hindi. Do not use English even if the user asks in English.";
+        }
+
+        const assisstantReply = await getOpenAIAPIResponse(message, systemPrompt);
         
         const assistantMsgId = crypto.randomUUID();
 
         thread.messages.push({
             messageId: assistantMsgId,
             parentId: userMsgId,
-            role: "assisstant", 
+            role: "assistant", 
             content: assisstantReply
         });
         

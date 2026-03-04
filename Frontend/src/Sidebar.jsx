@@ -8,7 +8,8 @@ function Sidebar() {
     fetchThreads, changeThread,
     createNewChat, deleteThread,
     sidebarOpen, setSidebarOpen,
-    setIsProfileOpen
+    setIsProfileOpen,
+    user, onLogout, t
   } = useChat();
 
   // Load threads on mount
@@ -25,7 +26,7 @@ function Sidebar() {
         <div className="sidebar-header">
           <div className="sidebar-brand">
             <span className="brand-icon">✦</span>
-            <span className="brand-name">Constellation</span>
+            <span className="brand-name">{t.sidebar.brand}</span>
           </div>
           <button
             className="icon-btn"
@@ -38,11 +39,11 @@ function Sidebar() {
           </button>
         </div>
 
-        <div className="sidebar-section-label">Recents</div>
+        <div className="sidebar-section-label">{t.sidebar.recents}</div>
 
         <ul className="thread-list">
           {allThreads.length === 0 && (
-            <li className="thread-empty">No conversations yet</li>
+            <li className="thread-empty">{t.sidebar.noThreads}</li>
           )}
           {allThreads.map((thread) => (
             <li
@@ -50,7 +51,7 @@ function Sidebar() {
               className={`thread-item${thread.threadID === currThreadId ? " thread-item--active" : ""}`}
               onClick={() => changeThread(thread.threadID)}
             >
-              <span className="thread-title">{thread.title || "Untitled"}</span>
+              <span className="thread-title">{thread.title || t.sidebar.untitled}</span>
               <button
                 className="thread-delete"
                 title="Delete"
@@ -72,13 +73,21 @@ function Sidebar() {
             className="sidebar-profile-btn"
             onClick={() => setIsProfileOpen(true)}
           >
-            <div className="sidebar-avatar">N</div>
-            <div className="sidebar-user-info">
-              <span className="sidebar-user-name">Nivi Jha</span>
-              <span className="sidebar-user-plan">Pro Plan</span>
+            <div className="sidebar-avatar">
+              {user?.avatar ? (
+                <img src={user.avatar} alt={user.displayName} style={{ width: '100%', height: '100%', borderRadius: 'inherit', objectFit: 'cover' }} />
+              ) : (
+                user?.displayName?.charAt(0) || user?.email?.charAt(0).toUpperCase()
+              )}
             </div>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="sidebar-profile-icon">
-              <circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/>
+            <div className="sidebar-user-info">
+              <span className="sidebar-user-name">{user?.displayName || t.sidebar.user}</span>
+              <span className="sidebar-user-plan">{user?.email}</span>
+            </div>
+          </button>
+          <button className="icon-btn logout-btn" title="Logout" onClick={onLogout}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M16 17l5-5-5-5M19 12H9M10 19H5a2 2 0 01-2-2V7a2 2 0 012-2h5" />
             </svg>
           </button>
         </div>

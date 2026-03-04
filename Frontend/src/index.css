@@ -7,15 +7,15 @@
 }
 
 :root {
-  --bg: #09090b; /* Darker, slightly cooler true background */
+  --bg: #09090b;
   --surface: #121214;
   --surface-2: #1c1c1f;
   --border: #27272a;
-  --text: #f4f4f5; /* Brighter neutral text */
-  --text-muted: #a1a1aa; /* Lighter muted text for readability */
-  --accent: #8b5cf6; /* A more refined purple accent */
+  --text: #f4f4f5;
+  --text-muted: #a1a1aa;
+  --accent: #8b5cf6;
   --accent-hover: #a78bfa;
-  --user-bubble: #18181b; 
+  --user-bubble: #18181b;
   --font: 'Inter', system-ui, -apple-system, sans-serif;
   --radius: 14px;
   --sidebar-w: 260px;
@@ -38,4 +38,7 @@ html, body, #root {
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
 
 button { cursor: pointer; border: none; background: none; font-family: inherit; }
-input, textarea { font-family: inherit; }
+input, textarea { 
+  font-family: inherit; 
+  color: inherit;
+}

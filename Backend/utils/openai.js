@@ -1,6 +1,12 @@
 import "dotenv/config";
 
-const getOpenAIAPIResponse = async(message) => {
+const getOpenAIAPIResponse = async(message, systemPrompt = "") => {
+    const messages = [];
+    if (systemPrompt) {
+        messages.push({ role: 'system', content: systemPrompt });
+    }
+    messages.push({ role: 'user', content: message });
+
     const options = {
         method: "POST",
         headers: {
@@ -10,18 +16,20 @@ const getOpenAIAPIResponse = async(message) => {
         },
         body: JSON.stringify({
             model: 'openai/gpt-oss-20b',
-            messages: [{
-                content: message, 
-                role: 'user'
-            }]
+            messages: messages
         })
     }
     try{
         const response = await fetch("https://integrate.api.nvidia.com/v1/chat/completions", options);
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`NVIDIA API Error: ${response.status} - ${errorText}`);
+        }
         const data = await response.json();
         return data.choices[0].message.content; //reply
     } catch(err){
-        console.log(err);
+        console.error("OpenAI Helper Error:", err);
+        throw err;
     }
 }
 

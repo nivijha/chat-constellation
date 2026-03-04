@@ -1,16 +1,34 @@
 import express from 'express';
 import "dotenv/config";
 import cors from 'cors';
+import helmet from 'helmet';
+import mongoSanitize from 'express-mongo-sanitize';
 import mongoose from "mongoose";
 import chatRoutes from "./routes/chat.js"
+import authRoutes from "./routes/auth.js"
 
 const app = express();
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;
 
+app.use(helmet()); 
 app.use(express.json());
-app.use(cors());
+app.use(mongoSanitize()); 
+
+// Dynamic CORS for production and local development
+const allowedOrigins = ['http://localhost:5173', process.env.FRONTEND_URL];
+app.use(cors({
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    optionsSuccessStatus: 200
+}));
 
 app.use("/api", chatRoutes);
+app.use("/api/auth", authRoutes);
 
 app.listen(PORT, ()=>{
     console.log(`server running on ${PORT}`);
@@ -26,28 +44,3 @@ const connectionDB = async()=>{
     }
 }
 
-// app.post("/test", async (req, res)=>{
-//     const options = {
-//         method: "POST",
-//         headers: {
-//             "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
-//             'content-type': 'application/json',
-//             accept: 'application/json',
-//         },
-//         body: JSON.stringify({
-//             model: 'openai/gpt-oss-20b',
-//             messages: [{
-//                 content: req.body.message, 
-//                 role: 'user'
-//             }]
-//         })
-//     }
-//     try{
-//         const response = await fetch("https://integrate.api.nvidia.com/v1/chat/completions", options);
-//         const data = await response.json();
-//         // console.log(data.choices[0].message.content);
-//         res.send(data.choices[0].message.content);
-//     } catch(err){
-//         console.log(err);
-//     }
-// })

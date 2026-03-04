@@ -12,7 +12,7 @@ const MessageSchema = new  mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ["user", "assisstant"],
+        enum: ["user", "assistant"],
         required: true
     },
     content: {
@@ -30,6 +30,11 @@ const ThreadSchema = new  mongoose.Schema({
         type: String,
         required: true,
         unique: true
+    },
+    userID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true
     },
     title: {
         type: String,

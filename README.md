@@ -1,34 +1,72 @@
-# Chat Constellation
+# Chat Constellation ✨
 
-**Chat Constellation** is a modern, intelligent chat application designed to organize and structure communication visually.
+**Chat Constellation** is a revolutionary AI chat application that visualizes your conversations as stellar systems. Unlike linear chat apps, it organizes your threads into a "Galaxy View" and your messages into interactive "Constellation Graphs," making context and relationships between ideas clear and beautiful.
 
-## Motivation 
+## 🚀 Key Features
 
-**1. Fragmented Communication Platforms**  
-Today, communication is scattered across multiple platforms such as messaging apps, email, forums, and collaborative tools. Users often struggle to manage conversations spread across different spaces. Chat Constellation aims to bring structured, organized, and meaningful communication into one cohesive system.
+-   **Galaxy View**: A 2D interactive space where every chat thread is a star. Zoom, pan, and explore your history visually.
+-   **Constellation Graphs**: View individual threads as nodes in a graph. See the flow of your conversation with AI and jump to any point instantly.
+-   **Full Localization**: Switch between **English** and **Hindi** seamlessly. The AI even responds in the selected language regardless of your input.
+-   **Intelligent UI**: Responsive dark theme with smooth glassmorphism effects and professional markdown rendering.
+-   **Security First**: Robust account deletion, JWT-based authentication, and Google OAuth 2.0 integration.
 
-**2. Need for Contextual Conversations**  
-Traditional chat systems often lose context when conversations grow large. Important information gets buried in long message threads. Chat Constellation is motivated by the idea of structuring conversations like constellations, where related messages form meaningful clusters, helping users easily follow discussions.
+## 🛠️ Tech Stack
 
-**3. Improving Collaboration**  
-Teams working on projects require:
-- Organized discussions
-- Quick access to previous conversations
-- Context-aware replies
+-   **Frontend**: React, Vite, React Flow (for graphs), React-Zoom-Pan-Pinch, CSS Modules.
+-   **Backend**: Node.js, Express, MongoDB (Mongoose), OpenAI API.
+-   **Auth**: JWT, bcryptjs, Google Auth Library.
 
-Chat Constellation helps users connect related ideas, messages, and discussions, improving collaboration and productivity.
+## 📦 Setup & Installation
 
-**4. Visual Representation of Conversations**  
-Most chat applications display conversations linearly, which makes it difficult to track complex discussions. Chat Constellation introduces a visual or structured approach to conversations, where messages connect like stars in a constellation, helping users understand relationships between ideas.
+### Prerequisites
+- Node.js (v16+)
+- MongoDB (Running locally or via Atlas)
+- OpenAI API Key
+- Google Cloud Console Project (for Google Login)
 
-**5. Intelligent Assistance in Communication**  
-Modern systems increasingly integrate AI to help users communicate more effectively. Chat Constellation incorporates AI-powered features such as:
-- Conversation summarization
-- Smart suggestions
-- Topic grouping
-- Contextual responses
+### 1. Clone the repository
+```bash
+git clone https://github.com/nivijha/chat-constellation.git
+cd chat-constellation
+```
 
-This enhances user experience and reduces information overload.
+### 2. Backend Setup
+```bash
+cd backend
+npm install
+```
+Create a `.env` file in the `backend` folder:
+```env
+PORT=8080
+MONGODB_URI=your_mongodb_uri
+JWT_SECRET=your_jwt_secret
+OPENAI_API_KEY=your_openai_key
+GOOGLE_CLIENT_ID=your_google_client_id
+```
+Start the server:
+```bash
+npm run dev
+```
 
-**6. Enhancing Knowledge Retention**  
-Important discussions often contain valuable insights but become hard to retrieve later. Chat Constellation enables organized knowledge storage, allowing users to revisit structured conversations and maintain long-term access to important information.
+### 3. Frontend Setup
+```bash
+cd ../frontend
+npm install
+```
+Create a `.env` file in the `frontend` folder:
+```env
+VITE_GOOGLE_CLIENT_ID=your_google_client_id
+```
+Start the app:
+```bash
+npm run dev
+```
+
+## 🔐 Security
+The project includes several security measures:
+-   **NoSQL Injection Prevention**: Automated sanitization of database queries.
+-   **Secure Authentication**: Passwords hashed with bcrypt and sessions managed via JWT.
+-   **Data Privacy**: Complete account deletion functionality removing all associated threads and messages.
+
+## 📄 License
+This project is licensed under the MIT License.

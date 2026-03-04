@@ -3,7 +3,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  background: radial-gradient(ellipse at bottom, #0a0a0c 0%, #000000 100%); /* Pitch black sky */
+  background: var(--bg);
   position: relative;
   border-top: 1px solid var(--border);
   overflow: hidden;
@@ -122,23 +122,20 @@
   top: -46px;
   left: 50%;
   transform: translateX(-50%) translateY(10px);
-  background: rgba(20, 20, 25, 0.65);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 8px 14px;
+  background: var(--surface);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  padding: 8px 16px;
   border-radius: 12px;
   font-size: 13px;
-  letter-spacing: 0.3px;
-  font-weight: 500;
-  line-height: 1.4;
-  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+  color: var(--text);
   white-space: nowrap;
   pointer-events: none;
   opacity: 0;
   visibility: hidden;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   z-index: 1001;
 }
 
@@ -151,9 +148,9 @@
   transform: translateX(-50%) rotate(45deg);
   width: 10px;
   height: 10px;
-  background: rgba(20, 20, 25, 0.85);
-  border-right: 1px solid rgba(255, 255, 255, 0.05);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
 }
 
 .global-star-2d:hover .galaxy-star-text-2d {
@@ -202,24 +199,22 @@
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: rgba(30, 30, 35, 0.4);
+  background: var(--surface);
   backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.8);
+  border: 1px solid var(--border);
+  color: var(--text);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
   transition: all 0.2s ease;
 }
 
 .zoom-controls button:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
+  background: var(--surface-2);
   transform: translateY(-2px);
-  border-color: rgba(255, 255, 255, 0.25);
+  border-color: var(--accent);
 }
 
 /* ── Panning Drag Cursors ── */

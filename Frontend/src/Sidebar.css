@@ -2,7 +2,7 @@
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0, 0, 0, 0.4);
   z-index: 40;
 }
 
@@ -109,7 +109,8 @@
 }
 
 .thread-item--active {
-  background: rgba(124, 111, 255, 0.12);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
   color: var(--accent-hover);
 }
 
@@ -142,6 +143,13 @@
 .sidebar-footer {
   padding-top: 12px;
   border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.logout-btn {
+  flex-shrink: 0;
 }
 
 .sidebar-profile-btn {
@@ -165,7 +173,7 @@
   width: 32px;
   height: 32px;
   border-radius: 8px;
-  background: linear-gradient(135deg, var(--accent) 0%, #b06fff 100%);
+  background: var(--accent);
   color: #fff;
   font-size: 13px;
   font-weight: 600;

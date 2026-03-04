@@ -18,6 +18,7 @@
   background: var(--bg);
   flex-shrink: 0;
   z-index: 10;
+  position: relative;
 }
 
 .navbar-left, .navbar-right {
@@ -64,7 +65,7 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #4ade80;
+  background: #10b981; /* Standard success green */
   flex-shrink: 0;
 }
 
@@ -75,18 +76,26 @@
   padding: 2px;
   border-radius: 8px;
   border: 1px solid var(--border);
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .view-toggle-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 24px;
+  width: 40px;
+  height: 32px;
   border-radius: 6px;
   color: var(--text-muted);
   background: transparent;
   transition: all 0.15s;
+}
+
+.view-toggle-btn svg {
+  width: 16px;
+  height: 16px;
 }
 
 .view-toggle-btn:hover {
@@ -103,7 +112,7 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent) 0%, #b06fff 100%);
+  background: var(--accent);
   color: #fff;
   font-size: 13px;
   font-weight: 600;
@@ -136,7 +145,7 @@
   border-radius: 10px;
   padding: 6px;
   z-index: 100;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
   animation: dropIn 0.15s ease;
 }
 
@@ -267,32 +276,36 @@
   width: 100%;
   max-width: 900px;
   display: flex;
-  align-items: flex-end;
+  align-items: center; /* Better vertical centering for placeholder */
   gap: 10px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 14px;
-  padding: 10px 10px 10px 16px;
-  transition: border-color 0.2s;
+  padding: 10px 16px;
+  transition: all 0.2s;
 }
 .input-box:focus-within {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(124, 111, 255, 0.1);
+  box-shadow: 0 0 0 3px rgba(124, 111, 255, 0.2);
 }
 
 .input-field {
   flex: 1;
-  background: none;
+  background: transparent;
   border: none;
   outline: none;
   color: var(--text);
   font-size: 14px;
-  line-height: 1.5;
+  line-height: 1.4;
+  padding: 4px 0;
   resize: none;
   max-height: 160px;
   overflow-y: auto;
 }
-.input-field::placeholder { color: var(--text-muted); }
+.input-field::placeholder { 
+  color: var(--text-muted);
+  opacity: 0.8;
+}
 
 .send-btn {
   width: 34px;

@@ -77,7 +77,7 @@ function ThreadStar({ thread, position, onClick }) {
 }
 
 export default function GlobalConstellation() {
-  const { allThreads, changeThread } = useChat();
+  const { allThreads, changeThread, t } = useChat();
 
   // Generate 2D Fibonacci/Phyllotaxis spiral positions for perfect, clean uniformity
   const starData = useMemo(() => {
@@ -106,19 +106,19 @@ export default function GlobalConstellation() {
 
   if (allThreads.length === 0) {
     return (
-      <div className="constellation-wrapper">
-        <div className="empty-state" style={{ opacity: 1, position: "absolute", top: "40%", left: "50%", transform: "translate(-50%, -50%)", zIndex: 10 }}>
+      <div className="constellation-wrapper" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div className="empty-state" style={{ opacity: 1, textAlign: 'center' }}>
           <div className="empty-star">✨</div>
-          <h1 className="empty-title">The galaxy is empty</h1>
-          <p className="empty-sub">Start a chat to create your first star.</p>
+          <h1 className="empty-title">{t.chat.galaxyEmptyTitle}</h1>
+          <p className="empty-sub">{t.chat.galaxyEmptySub}</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="constellation-wrapper" style={{ background: 'radial-gradient(ellipse at bottom, #0a0a0c 0%, #000000 100%)' }}>
-      {/* The stationary deep space background of tiny stars */}
+    <div className="constellation-wrapper" style={{ background: 'var(--bg)' }}>
+      {/* Distant stars always visible in dark mode */}
       <DeepStarBackground />
 
       <TransformWrapper

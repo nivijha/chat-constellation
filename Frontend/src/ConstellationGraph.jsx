@@ -24,6 +24,8 @@ export default function ConstellationGraph() {
     const nodes = [];
     const edges = [];
 
+    if (!Array.isArray(prevChats)) return { initialNodes: [], initialEdges: [] };
+
     // Simple tree structure, showing user chats with AI chats beneath them
     let userIndex = 0;
 
