@@ -56,8 +56,9 @@ npm install
 Create a `.env` file in the `frontend` folder:
 ```env
 VITE_GOOGLE_CLIENT_ID=your_google_client_id
+VITE_API_URL=http://localhost:8080/api
 ```
-Start the app:
+Start the app (it will run on `http://localhost:5174`):
 ```bash
 npm run dev
 ```
