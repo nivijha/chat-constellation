@@ -1,8 +1,8 @@
-# Chat Constellation ✨
+# Chat Constellation 
 
 **Chat Constellation** is a revolutionary AI chat application that visualizes your conversations as stellar systems. Unlike linear chat apps, it organizes your threads into a "Galaxy View" and your messages into interactive "Constellation Graphs," making context and relationships between ideas clear and beautiful.
 
-## 🚀 Key Features
+## Key Features
 
 -   **Galaxy View**: A 2D interactive space where every chat thread is a star. Zoom, pan, and explore your history visually.
 -   **Constellation Graphs**: View individual threads as nodes in a graph. See the flow of your conversation with AI and jump to any point instantly.
@@ -10,13 +10,13 @@
 -   **Intelligent UI**: Responsive dark theme with smooth glassmorphism effects and professional markdown rendering.
 -   **Security First**: Robust account deletion, JWT-based authentication, and Google OAuth 2.0 integration.
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 -   **Frontend**: React, Vite, React Flow (for graphs), React-Zoom-Pan-Pinch, CSS Modules.
 -   **Backend**: Node.js, Express, MongoDB (Mongoose), OpenAI API.
 -   **Auth**: JWT, bcryptjs, Google Auth Library.
 
-## 📦 Setup & Installation
+## Setup & Installation
 
 ### Prerequisites
 - Node.js (v16+)
@@ -63,11 +63,11 @@ Start the app (it will run on `http://localhost:5174`):
 npm run dev
 ```
 
-## 🔐 Security
+## Security
 The project includes several security measures:
 -   **NoSQL Injection Prevention**: Automated sanitization of database queries.
 -   **Secure Authentication**: Passwords hashed with bcrypt and sessions managed via JWT.
 -   **Data Privacy**: Complete account deletion functionality removing all associated threads and messages.
 
-## 📄 License
+## License
 This project is licensed under the MIT License.
