@@ -35,7 +35,24 @@ const LoginPage = ({ onLogin, onRegister, onGoogleLogin }) => {
         <div className="login-container">
             <div className="login-glass-card">
                 <div className="login-header">
-                    <div className="login-logo">✦</div>
+                    <div className="login-logo">
+                      <svg width="48" height="48" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="25" cy="30" r="4" fill="currentColor"/>
+                        <circle cx="35" cy="18" r="4" fill="currentColor"/>
+                        <circle cx="55" cy="15" r="4" fill="currentColor"/>
+                        <circle cx="70" cy="22" r="4" fill="currentColor"/>
+                        <circle cx="75" cy="40" r="4" fill="currentColor"/>
+                        <circle cx="65" cy="55" r="4" fill="currentColor"/>
+                        <circle cx="45" cy="50" r="4" fill="currentColor"/>
+                        <line x1="25" y1="30" x2="35" y2="18" stroke="currentColor" strokeWidth="1.5"/>
+                        <line x1="35" y1="18" x2="55" y2="15" stroke="currentColor" strokeWidth="1.5"/>
+                        <line x1="55" y1="15" x2="70" y2="22" stroke="currentColor" strokeWidth="1.5"/>
+                        <line x1="70" y1="22" x2="75" y2="40" stroke="currentColor" strokeWidth="1.5"/>
+                        <line x1="75" y1="40" x2="65" y2="55" stroke="currentColor" strokeWidth="1.5"/>
+                        <line x1="65" y1="55" x2="45" y2="50" stroke="currentColor" strokeWidth="1.5"/>
+                        <line x1="45" y1="50" x2="25" y2="30" stroke="currentColor" strokeWidth="1.5"/>
+                      </svg>
+                    </div>
                     <h1>{t.login.title}</h1>
                     <p className="subtitle">{isLogin ? t.login.welcome : t.login.signupSub}</p>
                 </div>

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 *, *::before, *::after {
   box-sizing: border-box;
@@ -7,17 +7,18 @@
 }
 
 :root {
-  --bg: #09090b;
-  --surface: #121214;
-  --surface-2: #1c1c1f;
-  --border: #27272a;
-  --text: #f4f4f5;
-  --text-muted: #a1a1aa;
-  --accent: #8b5cf6;
-  --accent-hover: #a78bfa;
+  --bg: #0a0a0b;
+  --surface: #111113;
+  --surface-2: #1a1a1d;
+  --border: #232326;
+  --text: #ececef;
+  --text-muted: #8a8a8f;
+  --accent: #e0e0e0;
+  --accent-hover: #ffffff;
+  --accent-brand: #c8c8cc;
   --user-bubble: #18181b;
   --font: 'Inter', system-ui, -apple-system, sans-serif;
-  --radius: 14px;
+  --radius: 12px;
   --sidebar-w: 260px;
 }
 
@@ -28,7 +29,7 @@ html, body, #root {
   font-family: var(--font);
   font-size: 14.5px;
   line-height: 1.5;
-  letter-spacing: -0.01em; 
+  letter-spacing: -0.01em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

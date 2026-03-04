@@ -2,7 +2,7 @@
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.5);
   z-index: 40;
 }
 
@@ -34,16 +34,17 @@
 .sidebar-brand {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   font-weight: 600;
   font-size: 15px;
   letter-spacing: -0.2px;
 }
 
 .brand-icon {
-  font-size: 18px;
-  color: var(--accent);
+  color: var(--text-muted);
   line-height: 1;
+  display: flex;
+  align-items: center;
 }
 
 .brand-name {
@@ -111,7 +112,7 @@
 .thread-item--active {
   background: var(--surface-2);
   border: 1px solid var(--border);
-  color: var(--accent-hover);
+  color: var(--text);
 }
 
 .thread-title {
@@ -173,8 +174,9 @@
   width: 32px;
   height: 32px;
   border-radius: 8px;
-  background: var(--accent);
-  color: #fff;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
   font-size: 13px;
   font-weight: 600;
   display: flex;
@@ -211,7 +213,6 @@
 /* -- responsive -- */
 @media (min-width: 641px) {
   .sidebar {
-    /* On desktop, hide sidebar when sidebar--open is NOT present */
     transform: translateX(-100%);
     margin-left: calc(-1 * var(--sidebar-w));
   }

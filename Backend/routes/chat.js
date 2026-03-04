@@ -99,10 +99,12 @@ router.post("/chat", auth, async(req, res)=>{
             content: message
         });
 
-        // Determine if we need a language system prompt
-        let systemPrompt = "";
+        // Base identity system prompt
+        let systemPrompt = "You are Chat Constellation, a helpful and knowledgeable AI assistant. When asked who you are, what you are, or your name, always identify yourself as Chat Constellation. You were created to help users with their questions and tasks.";
+        
+        // Append language-specific instruction
         if (language === "hi") {
-            systemPrompt = "CRITICAL: You MUST respond purely in Hindi. Do not use English even if the user asks in English.";
+            systemPrompt += " CRITICAL: You MUST respond purely in Hindi. Do not use English even if the user asks in English.";
         }
 
         const assisstantReply = await getOpenAIAPIResponse(message, systemPrompt);

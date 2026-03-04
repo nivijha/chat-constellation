@@ -4,7 +4,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--background);
+    background-color: var(--bg);
     color: var(--text);
     position: relative;
     overflow: hidden;
@@ -15,11 +15,9 @@
     width: 100%;
     max-width: 420px;
     padding: 40px;
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
     z-index: 10;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
     animation: fadeIn 0.6s ease-out;
@@ -36,17 +34,18 @@
 }
 
 .login-logo {
-    font-size: 40px;
-    color: var(--accent);
+    color: var(--text-muted);
     margin-bottom: 16px;
-    filter: drop-shadow(0 0 10px var(--accent));
+    display: flex;
+    justify-content: center;
 }
 
 .login-header h1 {
-    font-size: 28px;
+    font-size: 26px;
     font-weight: 700;
     margin-bottom: 8px;
     letter-spacing: -0.5px;
+    color: var(--text);
 }
 
 .subtitle {
@@ -77,19 +76,19 @@
 .form-group input {
     height: 48px;
     padding: 0 16px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    color: white;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
     font-size: 15px;
     transition: all 0.2s ease;
 }
 
 .form-group input:focus {
     outline: none;
-    border-color: var(--accent);
-    background: rgba(255, 255, 255, 0.08);
-    box-shadow: 0 0 0 4px rgba(0, 150, 255, 0.1);
+    border-color: var(--text-muted);
+    background: rgba(255, 255, 255, 0.06);
+    box-shadow: 0 0 0 3px rgba(200, 200, 204, 0.08);
 }
 
 .error-message {
@@ -104,21 +103,20 @@
 
 .login-btn {
     height: 48px;
-    background: var(--accent);
-    color: white;
+    background: var(--text);
+    color: var(--bg);
     border: none;
-    border-radius: 12px;
-    font-size: 16px;
+    border-radius: 10px;
+    font-size: 15px;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
     margin-top: 8px;
 }
 
 .login-btn:hover:not(:disabled) {
-    background: #007aff;
+    background: var(--accent-hover);
     transform: translateY(-1px);
-    box-shadow: 0 10px 20px -10px var(--accent);
 }
 
 .login-btn:active:not(:disabled) {
@@ -143,7 +141,7 @@
 .toggle-btn {
     background: none;
     border: none;
-    color: var(--accent);
+    color: var(--text);
     font-weight: 600;
     cursor: pointer;
     padding: 0;
@@ -166,7 +164,7 @@
     content: "";
     flex: 1;
     height: 1px;
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--border);
 }
 
 .login-divider span {
@@ -184,34 +182,34 @@
  
 .google-loading {
     padding: 12px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border);
+    border-radius: 10px;
     color: var(--text-muted);
     font-size: 14px;
     text-align: center;
     width: 100%;
 }
 
-/* Background Gradients */
+/* Background minimal accents */
 .bg-glow {
     position: absolute;
-    width: 600px;
-    height: 600px;
+    width: 500px;
+    height: 500px;
     border-radius: 100%;
-    filter: blur(120px);
-    opacity: 0.15;
+    filter: blur(150px);
+    opacity: 0.06;
     z-index: 1;
 }
 
 .bg-glow-1 {
     top: -200px;
     right: -100px;
-    background: var(--accent);
+    background: #ffffff;
 }
 
 .bg-glow-2 {
     bottom: -200px;
     left: -100px;
-    background: #7000ff;
+    background: #a0a0a0;
 }

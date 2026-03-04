@@ -57,7 +57,7 @@
   cursor: pointer;
 }
 .model-pill:hover {
-  border-color: var(--accent);
+  border-color: var(--text-muted);
   background: var(--surface-2);
 }
 
@@ -65,7 +65,7 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #10b981; /* Standard success green */
+  background: #10b981;
   flex-shrink: 0;
 }
 
@@ -104,7 +104,7 @@
 
 .view-toggle-btn.active {
   background: var(--surface);
-  color: var(--accent);
+  color: var(--text);
   box-shadow: 0 1px 2px rgba(0,0,0,0.2);
 }
 
@@ -112,8 +112,9 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: var(--accent);
-  color: #fff;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
   font-size: 13px;
   font-weight: 600;
   display: flex;
@@ -145,7 +146,7 @@
   border-radius: 10px;
   padding: 6px;
   z-index: 100;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
   animation: dropIn 0.15s ease;
 }
 
@@ -212,15 +213,14 @@
 }
 
 .empty-star {
-  font-size: 40px;
-  color: var(--accent);
+  color: var(--text-muted);
   line-height: 1;
   animation: pulse 3s ease-in-out infinite;
 }
 
 @keyframes pulse {
   0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.12); opacity: 0.7; }
+  50% { transform: scale(1.08); opacity: 0.6; }
 }
 
 .empty-title {
@@ -276,7 +276,7 @@
   width: 100%;
   max-width: 900px;
   display: flex;
-  align-items: center; /* Better vertical centering for placeholder */
+  align-items: center;
   gap: 10px;
   background: var(--surface);
   border: 1px solid var(--border);
@@ -285,8 +285,8 @@
   transition: all 0.2s;
 }
 .input-box:focus-within {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(124, 111, 255, 0.2);
+  border-color: var(--text-muted);
+  box-shadow: 0 0 0 2px rgba(200, 200, 204, 0.1);
 }
 
 .input-field {
@@ -320,8 +320,8 @@
   transition: background 0.15s, color 0.15s, transform 0.1s;
 }
 .send-btn--active {
-  background: var(--accent);
-  color: #fff;
+  background: var(--text);
+  color: var(--bg);
 }
 .send-btn--active:hover {
   background: var(--accent-hover);
