@@ -15,15 +15,23 @@ app.use(express.json());
 app.use(mongoSanitize()); 
 
 // Dynamic CORS for production and local development
-const allowedOrigins = ['http://localhost:5173', process.env.FRONTEND_URL];
+const allowedOrigins = [
+    'http://localhost:5173', 
+    'http://localhost:5174', 
+    'https://chat-constellation.vercel.app'
+];
 app.use(cors({
     origin: (origin, callback) => {
+        // Allow requests with no origin (like mobile apps or curl) 
+        // or if origin is in the allowed list
         if (!origin || allowedOrigins.includes(origin)) {
             callback(null, true);
         } else {
+            console.log("Blocked by CORS:", origin);
             callback(new Error('Not allowed by CORS'));
         }
     },
+    credentials: true,
     optionsSuccessStatus: 200
 }));
 

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useChat } from "./MyContext.jsx";
+import { API } from "./App.jsx";
 import "./SettingsModal.css";
 
 export default function SettingsModal() {
@@ -16,7 +17,7 @@ export default function SettingsModal() {
     }
 
     try {
-      const res = await fetch("http://localhost:8080/api/auth/account", {
+      const res = await fetch(`${API}/auth/account`, {
         method: "DELETE",
         headers: { "x-auth-token": token }
       });
