@@ -58,7 +58,7 @@ function ThreadStar({ thread, position, onClick }) {
   return (
     <div 
       className="global-star-2d" 
-      onClick={(e) => { e.stopPropagation(); onClick(thread.threadID); }}
+      onClick={(e) => { e.stopPropagation(); onClick(e, thread.threadID); }}
       style={{
         position: 'absolute',
         left: `calc(50% + ${position.x}px)`,

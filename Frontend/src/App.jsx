@@ -122,14 +122,15 @@ function App() {
         headers: { "x-auth-token": token }
       });
       const data = await res.json();
-      setPrevChats(data);
+      setPrevChats(Array.isArray(data) ? data : []);
+      setViewMode("chat");
     } catch (e) {
       console.error("changeThread:", e);
       setPrevChats([]);
     } finally {
       setLoading(false);
     }
-  }, [token]);
+  }, [token, setViewMode]);
 
   // Fetch all threads
   const fetchThreads = useCallback(async () => {

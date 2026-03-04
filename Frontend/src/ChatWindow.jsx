@@ -148,13 +148,14 @@ function ChatWindow() {
       )}
 
       {/* Input */}
-      <div className="input-area">
+      <div className={`input-area ${viewMode !== "chat" ? "input-area--disabled" : ""}`}>
         <div className="input-box">
           <textarea
             className="input-field"
-            placeholder={t.chat.placeholder}
+            placeholder={viewMode === "chat" ? t.chat.placeholder : "Click a star or switch to Chat View to send messages"}
             value={prompt}
             rows={1}
+            disabled={viewMode !== "chat"}
             onChange={(e) => {
               setPrompt(e.target.value);
               e.target.style.height = "auto";
@@ -163,8 +164,8 @@ function ChatWindow() {
             onKeyDown={handleKey}
           />
           <button
-            className={`send-btn${prompt.trim() ? " send-btn--active" : ""}`}
-            disabled={!prompt.trim() || loading}
+            className={`send-btn${(prompt.trim() && viewMode === "chat") ? " send-btn--active" : ""}`}
+            disabled={!prompt.trim() || loading || viewMode !== "chat"}
             onClick={handleSend}
             title="Send"
           >
