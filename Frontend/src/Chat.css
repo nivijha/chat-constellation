@@ -24,6 +24,16 @@
   flex-direction: row-reverse;
 }
 
+.message-highlight .bubble {
+  animation: highlightPulse 2s ease-out;
+}
+
+@keyframes highlightPulse {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(124, 111, 255, 0.7); border-color: var(--accent); }
+  50% { transform: scale(1.02); box-shadow: 0 0 20px 0 rgba(124, 111, 255, 0); border-color: var(--accent); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(124, 111, 255, 0); border-color: inherit; }
+}
+
 /* ── AI avatar ── */
 .ai-avatar {
   width: 32px;

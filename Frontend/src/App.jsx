@@ -20,6 +20,8 @@ function App() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [viewMode, setViewMode] = useState("chat"); // 'chat' | 'constellation'
 
+  const [activeMessageIndex, setActiveMessageIndex] = useState(null);
+
   // Sync current thread to local storage
   useEffect(() => {
     if (currThreadId) {
@@ -29,20 +31,31 @@ function App() {
     }
   }, [currThreadId]);
 
-  // Load a thread's messages
-  const changeThread = useCallback(async (threadId, targetView = "chat") => {
+  // Change to an existing chat session
+  const changeThread = useCallback(async (threadId) => {
     setCurrThreadId(threadId);
+    setLatestReply(null);
+    setActiveMessageIndex(null);
+    setLoading(true);
+    setViewMode("chat");
+
     try {
-      const res = await fetch(`${API}/thread/${threadId}`);
-      const msgs = await res.json();
-      setPrevChats(msgs);
-      setLatestReply(null);
-      // Switch back to target view when changing threads
-      setViewMode(targetView);
+      const res = await fetch(`${API}/thread/${threadId}/messages`);
+      const data = await res.json();
+      setPrevChats(data);
     } catch (e) {
       console.error("changeThread:", e);
+      setPrevChats([]);
+    } finally {
+      setLoading(false);
     }
   }, []);
+
+  // Load threads on initial mount
+  useEffect(() => {
+    fetchThreads();
+  }, []);
+
 
   // Fetch all threads
   const fetchThreads = useCallback(async () => {
@@ -55,6 +68,9 @@ function App() {
       const savedId = localStorage.getItem("chatConstellationThreadId");
       if (savedId && data.some(t => t.threadID === savedId)) {
         changeThread(savedId);
+      } else if (data.length > 0) {
+        // Load the first thread by default
+        changeThread(data[0].threadID);
       }
     } catch (e) {
       console.error("fetchThreads:", e);
@@ -67,6 +83,7 @@ function App() {
     setCurrThreadId(id);
     setPrevChats([]);
     setLatestReply(null);
+    setActiveMessageIndex(null);
     setViewMode("chat");
   }, []);
 
@@ -78,6 +95,7 @@ function App() {
         setCurrThreadId(null);
         setPrevChats([]);
         setLatestReply(null);
+        setActiveMessageIndex(null);
       }
       setAllThreads((prev) => prev.filter((t) => t.threadID !== threadId));
     } catch (e) {
@@ -88,6 +106,8 @@ function App() {
   // Send a message
   const getReply = useCallback(async (prompt) => {
     if (!prompt.trim() || loading) return;
+
+    setActiveMessageIndex(null); // Reset when sending a new msg
 
     const userMsg = { role: "user", content: prompt };
     setPrevChats((prev) => [...prev, userMsg]);
@@ -131,6 +151,7 @@ function App() {
     isProfileOpen, setIsProfileOpen,
     isSettingsOpen, setIsSettingsOpen,
     viewMode, setViewMode,
+    activeMessageIndex, setActiveMessageIndex,
     fetchThreads, changeThread,
     createNewChat, deleteThread,
     getReply,

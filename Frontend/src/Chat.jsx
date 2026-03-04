@@ -5,12 +5,21 @@ import remarkGfm from "remark-gfm";
 import "./Chat.css";
 
 function Chat() {
-  const { prevChats } = useChat();
+  const { prevChats, activeMessageIndex } = useChat();
   const bottomRef = useRef(null);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [prevChats]);
+    if (activeMessageIndex !== null && activeMessageIndex !== undefined) {
+      const el = document.getElementById(`chat-msg-${activeMessageIndex}`);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "center" });
+        el.classList.add("message-highlight");
+        setTimeout(() => el.classList.remove("message-highlight"), 2000);
+      }
+    } else {
+      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [prevChats, activeMessageIndex]);
 
   return (
     <div className="chats">
@@ -19,6 +28,7 @@ function Chat() {
         return (
           <div
             key={idx}
+            id={`chat-msg-${idx}`}
             className={`message-row ${isUser ? "message-row--user" : "message-row--ai"}`}
           >
             {!isUser && (
