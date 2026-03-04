@@ -8,7 +8,8 @@ import { MyContext } from "./MyContext.jsx";
 import { v4 as uuidv4 } from "uuid";
 import { translations } from "./translations";
 
-export const API = import.meta.env.VITE_API_URL || "http://localhost:8080/api";
+const rawAPI = import.meta.env.VITE_API_URL || "http://localhost:8080/api";
+export const API = rawAPI.endsWith('/') ? rawAPI.slice(0, -1) : rawAPI;
 
 function App() {
   const [allThreads, setAllThreads] = useState([]);
