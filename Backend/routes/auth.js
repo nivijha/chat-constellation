@@ -94,10 +94,16 @@ router.post("/google", async (req, res) => {
         console.log("Backend: Google token verified for:", gPayload.email);
         const { sub: googleId, email, name, picture } = gPayload;
 
+        if (!email) {
+            console.error("Backend Error: Google login failed - No email found in token payload");
+            return res.status(400).json({ error: "Google token missing email information" });
+        }
+
+        const normalizedEmail = email.toLowerCase();
         let user = await User.findOne({ 
             $or: [
                 { googleId: googleId },
-                { email: email.toLowerCase() }
+                { email: normalizedEmail }
             ]
         });
 
@@ -133,11 +139,11 @@ router.post("/google", async (req, res) => {
             }
         });
     } catch (err) {
-        console.error("Full Google login error:", err);
-        res.status(400).json({ 
-            error: "Invalid Google token", 
-            details: err.message,
-            stack: process.env.NODE_ENV === 'development' ? err.stack : undefined 
+        console.error("CRITICAL Google Login Failure:", err);
+        res.status(500).json({ 
+            error: "Google Authentication Error", 
+            message: err.message,
+            details: process.env.NODE_ENV === 'development' ? err.stack : undefined 
         });
     }
 });
