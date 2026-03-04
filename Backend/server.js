@@ -50,7 +50,7 @@ app.use(helmet({
 })); 
 
 app.use(express.json());
-app.use(mongoSanitize()); 
+// app.use(mongoSanitize()); // Removed due to incompatibility with Express 5
 
 // 4. Routes - ORDER MATTERS
 app.get("/", (req, res) => res.json({ status: "API is running" })); // Health check
