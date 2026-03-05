@@ -1,6 +1,6 @@
 # Chat Constellation 
 
-**Chat Constellation** is a revolutionary AI chat application that visualizes your conversations as stellar systems. Unlike linear chat apps, it organizes your threads into a "Galaxy View" and your messages into interactive "Constellation Graphs," making context and relationships between ideas clear and beautiful.
+**Chat Constellation** is an interactive  AI chat application that visualizes your conversations as stellar systems. Unlike linear chat apps, it organizes your threads into a "Galaxy View" and your messages into interactive "Constellation Graphs," making context and relationships between ideas clear and beautiful.
 
 ## Key Features
 
@@ -15,6 +15,22 @@
 -   **Frontend**: React, Vite, React Flow (for graphs), React-Zoom-Pan-Pinch, CSS Modules.
 -   **Backend**: Node.js, Express, MongoDB (Mongoose), OpenAI API.
 -   **Auth**: JWT, bcryptjs, Google Auth Library.
+
+--- 
+
+## System Workflow
+```
+User Message
+ ↓
+Frontend Chat Interface
+ ↓
+Message Rendering Engine
+ ↓
+Constellation Visualization
+ ↓
+Interactive Conversation Exploration
+```
+---
 
 ## Setup & Installation
 
