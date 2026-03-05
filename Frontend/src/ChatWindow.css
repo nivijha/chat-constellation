@@ -334,3 +334,53 @@
   color: var(--text-muted);
   text-align: center;
 }
+
+/* -- responsive: mobile -- */
+@media (max-width: 640px) {
+  .navbar {
+    padding: 8px 12px;
+    gap: 4px;
+  }
+  .view-toggle {
+    position: static;
+    transform: none;
+  }
+  .view-toggle-btn {
+    width: 34px;
+    height: 28px;
+  }
+  .model-pill {
+    font-size: 12px;
+    padding: 4px 8px;
+  }
+  .input-area {
+    padding: 8px 12px 14px;
+  }
+  .input-box {
+    max-width: 100%;
+    padding: 8px 12px;
+    border-radius: 12px;
+  }
+  .input-field {
+    font-size: 14px;
+  }
+  .send-btn {
+    width: 30px;
+    height: 30px;
+  }
+  .empty-title {
+    font-size: 18px;
+  }
+  .empty-sub {
+    font-size: 13px;
+  }
+  .dropdown {
+    width: 160px;
+  }
+}
+
+@media (max-width: 380px) {
+  .navbar-right .icon-btn:not(:last-child) {
+    display: none;
+  }
+}

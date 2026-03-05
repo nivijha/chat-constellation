@@ -215,3 +215,44 @@
   background-color: var(--border);
   border: 0;
 }
+
+/* -- responsive: mobile -- */
+@media (max-width: 640px) {
+  .chats {
+    padding: 0 12px;
+    gap: 14px;
+  }
+  .message-row {
+    gap: 10px;
+  }
+  .bubble {
+    max-width: 92%;
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+  .bubble--ai {
+    padding: 4px 0 0 2px;
+  }
+  .ai-avatar {
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    font-size: 12px;
+  }
+  .markdown-body {
+    font-size: 14px;
+  }
+  .markdown-body pre {
+    padding: 10px;
+    font-size: 80%;
+  }
+}
+
+@media (max-width: 380px) {
+  .ai-avatar {
+    display: none;
+  }
+  .bubble {
+    max-width: 100%;
+  }
+}

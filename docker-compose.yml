@@ -1,0 +1,31 @@
+version: "3.9"
+services:
+  mongo:
+    image: mongo:7
+    volumes:
+      - mongo-data:/data/db
+    ports:
+      - "27017:27017"
+
+  backend:
+    build: ./Backend
+    ports:
+      - "8080:8080"
+    env_file: ./Backend/.env
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017/chat-constellation
+    depends_on:
+      - mongo
+
+  frontend:
+    build:
+      context: ./Frontend
+      args:
+        VITE_API_URL: http://localhost:8080/api
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+volumes:
+  mongo-data:
