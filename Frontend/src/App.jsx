@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { Analytics } from "@vercel/analytics/react";
 import "./index.css";
 import Sidebar from "./Sidebar.jsx";
 import ChatWindow from "./ChatWindow.jsx";
@@ -273,6 +274,7 @@ function App() {
             ) : <Navigate to="/login" />} 
           />
         </Routes>
+        <Analytics />
       </MyContext.Provider>
     </Router>
   );
