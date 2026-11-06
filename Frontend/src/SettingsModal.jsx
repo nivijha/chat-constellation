@@ -7,7 +7,7 @@ export default function SettingsModal() {
   const { 
     isSettingsOpen, setIsSettingsOpen, 
     language, setLanguage, t,
-    onLogout, token
+    onLogout, token, handleUnauthorized
   } = useChat();
   const [activeTab, setActiveTab] = useState("general");
 
@@ -21,6 +21,7 @@ export default function SettingsModal() {
         method: "DELETE",
         headers: { "x-auth-token": token }
       });
+      if (handleUnauthorized(res)) return;
       
       if (res.ok) {
         alert("Account deleted successfully.");

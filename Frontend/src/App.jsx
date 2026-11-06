@@ -1,5 +1,10 @@
 import { useState, useCallback, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import { Analytics } from "@vercel/analytics/react";
 import "./index.css";
 import Sidebar from "./Sidebar.jsx";
@@ -10,18 +15,23 @@ import { v4 as uuidv4 } from "uuid";
 import { translations } from "./translations";
 
 const rawAPI = import.meta.env.VITE_API_URL || "http://localhost:8080/api";
-export const API = rawAPI.endsWith('/') ? rawAPI.slice(0, -1) : rawAPI;
+export const API = rawAPI.endsWith("/") ? rawAPI.slice(0, -1) : rawAPI;
 
 function App() {
   const [allThreads, setAllThreads] = useState([]);
-  const [currThreadId, setCurrThreadId] = useState(() => localStorage.getItem("chatConstellationThreadId") || null);
+  const [currThreadId, setCurrThreadId] = useState(
+    () => localStorage.getItem("chatConstellationThreadId") || null,
+  );
   const [prevChats, setPrevChats] = useState([]);
   const [latestReply, setLatestReply] = useState(null);
   const [loading, setLoading] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   // Auth States
-  const [token, setToken] = useState(() => localStorage.getItem("chatConstellationToken"));
+  const [token, setToken] = useState(() =>
+    localStorage.getItem("chatConstellationToken"),
+  );
+  const [authError, setAuthError] = useState("");
   const [user, setUser] = useState(() => {
     const savedUser = localStorage.getItem("chatConstellationUser");
     return savedUser ? JSON.parse(savedUser) : null;
@@ -32,7 +42,9 @@ function App() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [viewMode, setViewMode] = useState("chat"); // 'chat' | 'constellation'
   const [activeMessageIndex, setActiveMessageIndex] = useState(null);
-  const [language, setLanguage] = useState(() => localStorage.getItem("chatConstellationLanguage") || "en");
+  const [language, setLanguage] = useState(
+    () => localStorage.getItem("chatConstellationLanguage") || "en",
+  );
 
   const t = translations[language];
 
@@ -41,10 +53,12 @@ function App() {
     if (token) localStorage.setItem("chatConstellationToken", token);
     else localStorage.removeItem("chatConstellationToken");
 
-    if (user) localStorage.setItem("chatConstellationUser", JSON.stringify(user));
+    if (user)
+      localStorage.setItem("chatConstellationUser", JSON.stringify(user));
     else localStorage.removeItem("chatConstellationUser");
 
-    if (currThreadId) localStorage.setItem("chatConstellationThreadId", currThreadId);
+    if (currThreadId)
+      localStorage.setItem("chatConstellationThreadId", currThreadId);
     else localStorage.removeItem("chatConstellationThreadId");
 
     localStorage.setItem("chatConstellationLanguage", language);
@@ -87,9 +101,10 @@ function App() {
         body: JSON.stringify({ tokenId }),
       });
       const data = await res.json();
-      
+
       if (!res.ok) {
-        const errorMsg = data.error || data.details || "Google Auth failed on server";
+        const errorMsg =
+          data.error || data.details || "Google Auth failed on server";
         console.error("App.jsx onGoogleLogin: Server Error:", errorMsg);
         throw new Error(errorMsg);
       }
@@ -110,41 +125,59 @@ function App() {
     setPrevChats([]);
   }, []);
 
-  // Change to an existing chat session
-  const changeThread = useCallback(async (threadId) => {
-    if (!token) return;
-    setCurrThreadId(threadId);
-    setLatestReply(null);
-    setActiveMessageIndex(null);
-    setLoading(true);
+  const clearAuthError = useCallback(() => setAuthError(""), []);
 
-    try {
-      const res = await fetch(`${API}/thread/${threadId}`, {
-        headers: { "x-auth-token": token }
-      });
-      const data = await res.json();
-      setPrevChats(Array.isArray(data) ? data : []);
-      setViewMode("chat");
-    } catch (e) {
-      console.error("changeThread:", e);
-      setPrevChats([]);
-    } finally {
-      setLoading(false);
-    }
-  }, [token, setViewMode]);
+  const handleUnauthorized = useCallback(
+    (res) => {
+      if (res.status !== 401) return false;
+
+      setAuthError("Your session has expired. Please log in again.");
+      onLogout();
+      return true;
+    },
+    [onLogout],
+  );
+
+  // Change to an existing chat session
+  const changeThread = useCallback(
+    async (threadId) => {
+      if (!token) return;
+      setCurrThreadId(threadId);
+      setLatestReply(null);
+      setActiveMessageIndex(null);
+      setLoading(true);
+
+      try {
+        const res = await fetch(`${API}/thread/${threadId}`, {
+          headers: { "x-auth-token": token },
+        });
+        if (handleUnauthorized(res)) return;
+        const data = await res.json();
+        setPrevChats(Array.isArray(data) ? data : []);
+        setViewMode("chat");
+      } catch (e) {
+        console.error("changeThread:", e);
+        setPrevChats([]);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [token, setViewMode, handleUnauthorized],
+  );
 
   // Fetch all threads
   const fetchThreads = useCallback(async () => {
     if (!token) return;
     try {
       const res = await fetch(`${API}/thread`, {
-        headers: { "x-auth-token": token }
+        headers: { "x-auth-token": token },
       });
+      if (handleUnauthorized(res)) return;
       const data = await res.json();
       setAllThreads(data);
-      
+
       const savedId = localStorage.getItem("chatConstellationThreadId");
-      if (savedId && data.some(t => t.threadID === savedId)) {
+      if (savedId && data.some((t) => t.threadID === savedId)) {
         changeThread(savedId);
       } else if (data.length > 0) {
         changeThread(data[0].threadID);
@@ -152,7 +185,7 @@ function App() {
     } catch (e) {
       console.error("fetchThreads:", e);
     }
-  }, [token, changeThread]);
+  }, [token, changeThread, handleUnauthorized]);
 
   // Load threads on initial mount
   useEffect(() => {
@@ -170,108 +203,160 @@ function App() {
   }, []);
 
   // Delete a thread
-  const deleteThread = useCallback(async (threadId) => {
-    if (!token) return;
-    try {
-      await fetch(`${API}/thread/${threadId}`, { 
-        method: "DELETE",
-        headers: { "x-auth-token": token }
-      });
-      if (threadId === currThreadId) {
-        setCurrThreadId(null);
-        setPrevChats([]);
-        setLatestReply(null);
-        setActiveMessageIndex(null);
+  const deleteThread = useCallback(
+    async (threadId) => {
+      if (!token) return;
+      try {
+        const res = await fetch(`${API}/thread/${threadId}`, {
+          method: "DELETE",
+          headers: { "x-auth-token": token },
+        });
+        if (handleUnauthorized(res)) return;
+        if (threadId === currThreadId) {
+          setCurrThreadId(null);
+          setPrevChats([]);
+          setLatestReply(null);
+          setActiveMessageIndex(null);
+        }
+        setAllThreads((prev) => prev.filter((t) => t.threadID !== threadId));
+      } catch (e) {
+        console.error("deleteThread:", e);
       }
-      setAllThreads((prev) => prev.filter((t) => t.threadID !== threadId));
-    } catch (e) {
-      console.error("deleteThread:", e);
-    }
-  }, [token, currThreadId]);
+    },
+    [token, currThreadId, handleUnauthorized],
+  );
 
   // Send a message
-  const getReply = useCallback(async (prompt) => {
-    if (!prompt.trim() || loading || !token) return;
+  const getReply = useCallback(
+    async (prompt) => {
+      if (!prompt.trim() || loading || !token) return;
 
-    setActiveMessageIndex(null); 
+      setActiveMessageIndex(null);
 
-    const userMsg = { role: "user", content: prompt };
-    setPrevChats((prev) => [...prev, userMsg]);
-    setLatestReply("…");
-    setLoading(true);
+      const userMsg = { role: "user", content: prompt };
+      setPrevChats((prev) => [...prev, userMsg]);
+      setLatestReply("…");
+      setLoading(true);
 
-    const threadID = currThreadId || uuidv4();
-    if (!currThreadId) setCurrThreadId(threadID);
+      const threadID = currThreadId || uuidv4();
+      if (!currThreadId) setCurrThreadId(threadID);
 
-    try {
-      const res = await fetch(`${API}/chat`, {
-        method: "POST",
-        headers: { 
-          "Content-Type": "application/json",
-          "x-auth-token": token
-        },
-        body: JSON.stringify({ 
-          threadID, 
-          message: prompt,
-          language 
-        }),
-      });
-      const data = await res.json();
-      let reply = data.reply || "No response.";
-      
-      // Sanitize <br> and <br/> tags to newlines for Markdown
-      reply = reply.replace(/<br\s*\/?>/gi, "\n");
+      try {
+        const res = await fetch(`${API}/chat`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-auth-token": token,
+          },
+          body: JSON.stringify({
+            threadID,
+            message: prompt,
+            language,
+          }),
+        });
+        if (handleUnauthorized(res)) return;
+        const data = await res.json();
+        let reply = data.reply || "No response.";
 
-      setPrevChats((prev) => [...prev, { role: "assistant", content: reply }]);
-      setLatestReply(null);
-      await fetchThreads();
-    } catch (e) {
-      console.error("getReply:", e);
-      setPrevChats((prev) => [
-        ...prev,
-        { role: "assistant", content: "Something went wrong. Try again." },
-      ]);
-      setLatestReply(null);
-    } finally {
-      setLoading(false);
-    }
-  }, [token, currThreadId, loading, fetchThreads, language]);
+        // Sanitize <br> and <br/> tags to newlines for Markdown
+        reply = reply.replace(/<br\s*\/?>/gi, "\n");
+
+        setPrevChats((prev) => [
+          ...prev,
+          { role: "assistant", content: reply },
+        ]);
+        setLatestReply(null);
+        await fetchThreads();
+      } catch (e) {
+        console.error("getReply:", e);
+        setPrevChats((prev) => [
+          ...prev,
+          { role: "assistant", content: "Something went wrong. Try again." },
+        ]);
+        setLatestReply(null);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [token, currThreadId, loading, fetchThreads, language, handleUnauthorized],
+  );
 
   const providerValues = {
-    allThreads, setAllThreads,
-    currThreadId, setCurrThreadId,
-    prevChats, setPrevChats,
-    latestReply, setLatestReply,
-    loading, setLoading,
-    sidebarOpen, setSidebarOpen,
-    isProfileOpen, setIsProfileOpen,
-    isSettingsOpen, setIsSettingsOpen,
-    viewMode, setViewMode,
-    activeMessageIndex, setActiveMessageIndex,
-    fetchThreads, changeThread,
-    createNewChat, deleteThread,
+    allThreads,
+    setAllThreads,
+    currThreadId,
+    setCurrThreadId,
+    prevChats,
+    setPrevChats,
+    latestReply,
+    setLatestReply,
+    loading,
+    setLoading,
+    sidebarOpen,
+    setSidebarOpen,
+    isProfileOpen,
+    setIsProfileOpen,
+    isSettingsOpen,
+    setIsSettingsOpen,
+    viewMode,
+    setViewMode,
+    activeMessageIndex,
+    setActiveMessageIndex,
+    fetchThreads,
+    changeThread,
+    createNewChat,
+    deleteThread,
     getReply,
-    user, token,
-    onLogin, onRegister, onLogout, onGoogleLogin,
-    language, setLanguage, t
+    user,
+    token,
+    onLogin,
+    onRegister,
+    onLogout,
+    onGoogleLogin,
+    handleUnauthorized,
+    language,
+    setLanguage,
+    t,
   };
 
   return (
     <Router>
       <MyContext.Provider value={providerValues}>
         <Routes>
-          <Route 
-            path="/login" 
-            element={!token ? <LoginPage onLogin={onLogin} onRegister={onRegister} onGoogleLogin={onGoogleLogin} /> : <Navigate to="/" />} 
+          <Route
+            path="/login"
+            element={
+              !token ? (
+                <LoginPage
+                  onLogin={onLogin}
+                  onRegister={onRegister}
+                  onGoogleLogin={onGoogleLogin}
+                  authError={authError}
+                  clearAuthError={clearAuthError}
+                />
+              ) : (
+                <Navigate to="/" />
+              )
+            }
           />
-          <Route 
-            path="/" 
-            element={token ? (
-              <div style={{ display: "flex", height: "100vh", overflow: "hidden" }}>
-                <Sidebar />
-                <ChatWindow />
-              </div>
-            ) : <Navigate to="/login" />} 
+          <Route
+            path="/"
+            element={
+              token ? (
+                <div
+                  style={{
+                    display: "flex",
+                    height: "100vh",
+                    overflow: "hidden",
+                  }}
+                >
+                  <Sidebar />
+                  <ChatWindow />
+                </div>
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
           />
         </Routes>
         <Analytics />

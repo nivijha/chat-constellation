@@ -121,6 +121,7 @@ export default function ConstellationGraph() {
         fitViewOptions={{ padding: 0.2 }}
         className="dark-flow"
         minZoom={0.2}
+        proOptions={{ hideAttribution: true }}
       >
         <Background color="var(--border)" gap={24} size={1} />
         <Controls showInteractive={false} showZoom={true} />
